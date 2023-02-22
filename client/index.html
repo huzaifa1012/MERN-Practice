@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form method="post">
+
+        <input type="text" id="name" placeholder="name" /><br />
+        <input type="text" id="phone" placeholder="phone" /><br />
+        <input type="text" id="email" placeholder="email" /><br />
+        <input type="text" id="password" placeholder="password" /><br />
+        <input type="submit" onclick="send(event)" value="Register">
+    </form>
+
+    <script>
+      let nameInput = document.getElementById("name");
+      let phoneInput = document.getElementById("phone");
+      let emailInput = document.getElementById("email");
+      let passwordInput = document.getElementById("password");
+
+      async function send(e) {
+        e.preventDefault()
+        let name = nameInput.value;
+        let phone = phoneInput.value;
+        let email = emailInput.value;
+        let password = passwordInput.value;
+        const res = await fetch("/register", {
+          method: "POST",
+          headers: { "Content-type": "application/json" },
+          body: JSON.stringify({
+            name,
+            phone,
+            email,
+            password,
+          }),
+        });
+        if (res.ok) {
+          const response = await res.json();
+          console.log(response);
+        } else {
+          console.error('Error:', res.status);
+        }
+      }
+    </script>
+  </body>
+</html>

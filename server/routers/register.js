@@ -1,7 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const User = require("../model/schema");
+
 router.get("/", (req, res) => {
   res.send("This is From Routeer");
 });
@@ -30,23 +32,38 @@ router.post("/register", async (req, res) => {
 
 router.post("/signin", async (req, res) => {
   try {
+    let myToken;
     const { email, password } = req.body;
+    
     if (!email || !password) {
       return res.status(400).json({ error: "please fill data" });
     }
+    
     let isRigistered = await User.findOne({ email: email });
+    
     if (!isRigistered) {
-      return res.status(400).json({ message: "Wrong credential" });
+      return res.status(400).json({ message: "Wrong credential 1" });
     }
-    let Authverif = await bcrypt.compare(password, isRigistered.password);
-    if (Authverif) {
-      res.status(200).json({ message: "you are sign in" });
+
+    myToken = await isRigistered.generateAuthToken();
+    console.log(myToken);
+
+    let passwordCheck = await bcrypt.compare(password, isRigistered.password);
+    if (!passwordCheck) {
+      console.log(
+        "Wrong Pass",
+        isRigistered.password,
+        "bas bas bas ",
+        password
+      );
+      res.status(400).json({ message: "Wrong credential 2 pass" });
     } else {
-      res.status(400).json({ message: "Wrong credential" });
+      res.status(200).json({ message: "you are s ign in" });
     }
-  } catch (e) {
+  }catch (e) {
     console.log(e);
   }
+    
 });
 
 module.exports = router;
