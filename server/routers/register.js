@@ -3,12 +3,15 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../model/schema");
+const app = express(); 
+const cors = require('cors');
 
+app.use(cors())
 router.get("/", (req, res) => {
   res.send("This is From Routeer");
 });
 
-router.post("/register", async (req, res) => {
+router.post("/register", cors(),async (req, res) => {
   const { name, phone, email, password } = req.body;
   if (!name || !phone || !email || !password) {
     return res.status(400).json("some fields are  missing");
@@ -30,6 +33,9 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.get("/abc", (req, res) => {
+  res.send("wowowo")
+})
 router.post("/signin", async (req, res) => {
   try {
     let myToken;

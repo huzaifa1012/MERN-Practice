@@ -7,14 +7,11 @@
     <title>Document</title>
   </head>
   <body>
-    <form method="post">
-
-        <input type="text" id="name" placeholder="name" /><br />
-        <input type="text" id="phone" placeholder="phone" /><br />
-        <input type="text" id="email" placeholder="email" /><br />
-        <input type="text" id="password" placeholder="password" /><br />
-        <input type="submit" onclick="send(event)" value="Register">
-    </form>
+    <input type="text" id="name" placeholder="name" /><br />
+    <input type="text" id="phone" placeholder="phone" /><br />
+    <input type="text" id="email" placeholder="email" /><br />
+    <input type="text" id="password" placeholder="password" /><br />
+    <button onclick="send()">submit</button>
 
     <script>
       let nameInput = document.getElementById("name");
@@ -22,13 +19,12 @@
       let emailInput = document.getElementById("email");
       let passwordInput = document.getElementById("password");
 
-      async function send(e) {
-        e.preventDefault()
+      async function send() {
         let name = nameInput.value;
         let phone = phoneInput.value;
         let email = emailInput.value;
         let password = passwordInput.value;
-        const res = await fetch("/register", {
+        const res = await fetch("http://localhost:3000/register", {
           method: "POST",
           headers: { "Content-type": "application/json" },
           body: JSON.stringify({
