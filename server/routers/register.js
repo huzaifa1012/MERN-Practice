@@ -33,37 +33,33 @@ router.post("/register", async (req, res) => {
 router.post("/signin", async (req, res) => {
   try {
     let myToken;
+    let isMatch 
     const { email, password } = req.body;
-    
+
     if (!email || !password) {
       return res.status(400).json({ error: "please fill data" });
     }
-    
+
     let isRigistered = await User.findOne({ email: email });
-    
-    if (!isRigistered) {
+
+    if (isRigistered) {
+      // myToken = await isRigistered.generateAuthToken();
+      // console.log(myToken);
+
+       isMatch = await bcrypt.compare(password, isRigistered.password);
+
+      if (!isMatch) {
+        res.status(400).json({ message: "password not compared" });
+      } else {
+        res.json({ message: "Signed in Done" });
+        // res.status(200).json({ message: "Signed in Done" });
+      }
+    } else {
       return res.status(400).json({ message: "Wrong credential 1" });
     }
-
-    myToken = await isRigistered.generateAuthToken();
-    console.log(myToken);
-
-    let passwordCheck = await bcrypt.compare(password, isRigistered.password);
-    if (!passwordCheck) {
-      console.log(
-        "Wrong Pass",
-        isRigistered.password,
-        "bas bas bas ",
-        password
-      );
-      res.status(400).json({ message: "Wrong credential 2 pass" });
-    } else {
-      res.status(200).json({ message: "you are s ign in" });
-    }
-  }catch (e) {
+  } catch (e) {
     console.log(e);
   }
-    
 });
 
 module.exports = router;
