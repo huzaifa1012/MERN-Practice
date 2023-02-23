@@ -1,17 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../model/schema");
-const app = express(); 
-const cors = require('cors');
+const app = express();
+const cors = require("cors");
 
-app.use(cors())
+app.use(cors());
 router.get("/", (req, res) => {
   res.send("This is From Routeer");
 });
 
-router.post("/register", cors(),async (req, res) => {
+router.post("/register", cors(), async (req, res) => {
   const { name, phone, email, password } = req.body;
   if (!name || !phone || !email || !password) {
     return res.status(400).json("some fields are  missing");
@@ -33,31 +33,30 @@ router.post("/register", cors(),async (req, res) => {
   }
 });
 
-router.get("/abc", (req, res) => {
-  res.send("wowowo")
-})
-router.post("/signin", async (req, res) => {
+router.post("/signin", cors(), async (req, res) => {
   try {
-    let myToken;
-    let isMatch 
     const { email, password } = req.body;
-
     if (!email || !password) {
       return res.status(400).json({ error: "please fill data" });
     }
-
+    let myToken = "";
     let isRigistered = await User.findOne({ email: email });
-
     if (isRigistered) {
-      // myToken = await isRigistered.generateAuthToken();
-      // console.log(myToken);
 
-       isMatch = await bcrypt.compare(password, isRigistered.password);
+      // console.log("Entered Pass =>",password, "Database Pass= >",  isRigistered);
+      const isMatch = await bcrypt.compare(password, isRigistered.password);
 
-      if (!isMatch) {
-        res.status(400).json({ message: "password not compared" });
-      } else {
+      myToken = await isRigistered.generateAuthToken();
+      res.cookie("JWTToken", myToken, {
+        expires: new Date(Date.now() + 25892000000),
+        httpOnly: true,
+      });
+      console.log(myToken);
+
+      if (isMatch) {
         res.json({ message: "Signed in Done" });
+      } else {
+        res.status(400).json({ message: "password not compared" });
         // res.status(200).json({ message: "Signed in Done" });
       }
     } else {

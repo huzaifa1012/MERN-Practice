@@ -5,15 +5,35 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <input type="text" id="name" placeholder="name" /><br />
-    <input type="text" id="phone" placeholder="phone" /><br />
-    <input type="text" id="email" placeholder="email" /><br />
+
+    <div class="box-wrap">
+      <div class="box">
+      <h1>Register Here</h1>
+      <input type="text" id="name" placeholder="name" /><br />
+      <input type="text" id="phone" placeholder="phone" /><br />
+      <input type="text" id="email" placeholder="email" /><br />
     <input type="text" id="password" placeholder="password" /><br />
     <button onclick="send()">submit</button>
+  </div>
+  </div>
+
+    <div class="box-wrap">
+      <div class="box">
+      <h1>Sign in Here</h1>
+      <input type="text" id="signin_email" placeholder="email" /><br />
+    <input type="text" id="signin_password" placeholder="password" /><br />
+    <button onclick="signin()">Sign in</button>
+  </div>
+  </div>
 
     <script>
+
+
+
+// Register
       let nameInput = document.getElementById("name");
       let phoneInput = document.getElementById("phone");
       let emailInput = document.getElementById("email");
@@ -38,9 +58,47 @@
           const response = await res.json();
           console.log(response);
         } else {
-          console.error('Error:', res.status);
+          // const status = await res.status();
+          const err = await res.json();
+          console.error('Error:',err);
         }
       }
+
+
+
+
+
+
+
+
+      // Signing
+      let signin_email = document.getElementById("signin_email");
+      let signin_password = document.getElementById("signin_password");
+      async function signin(){
+        let email = signin_email.value
+        let password = signin_password.value
+          const signin_res = await fetch("http://localhost:3000/signin",{
+            method:"POST",
+            headers:{"Content-type":"application/json"},
+        body:JSON.stringify({
+        email,
+        password
+      })
+      })
+      if(signin_res.ok) {
+        console.log("Alhamdulillah ,Signin Successfully")
+      }
+      else{
+        
+        console.log("sorry",signin_res.status)
+      }
+
+
+
+
+      }
+
+
     </script>
   </body>
 </html>

@@ -1,0 +1,44 @@
+body {
+    margin: 0%;
+
+}
+.box-wrap{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.box{
+    padding: 10px;
+}
+.box h1{
+color: blue;
+font-family: Georgia, 'Times New Roman', Times, serif;
+    
+ }
+.box input:focus {
+    outline: none;
+    outline: none;
+    /* border: none !important; */
+    border-bottom:2px solid orange;
+}
+.box input {
+    transition: 0.3s;
+    border: none;
+    border-bottom: 2px solid blue;
+    height: 25px;
+    width: 80vw;
+    max-width: 500px;
+    min-width: 290px;
+    margin: 10px 0px;
+}
+.box button {
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin: 10px 0px;
+    width: 100%;
+    font-size: 16px;
+    height: 30px;
+}
