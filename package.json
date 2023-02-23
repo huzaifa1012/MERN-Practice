@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "bcrypt-inzi": "^1.0.7",
     "cors": "^2.8.5"
   }
 }

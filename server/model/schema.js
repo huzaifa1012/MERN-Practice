@@ -26,18 +26,18 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre("save", async function (next) {
-  try {
-    let hashedPassword = await bcrypt.hash(this.password, 12);
-    this.password = hashedPassword;
-    next();
-  } catch (error) {
-    next(error);
+ if(this.isModified('password')){
+     let hashedPassword = await bcrypt.hash(this.password, 12);
+     this.password = hashedPassword;
+    
+     next();
+    
   }
 });
 
 userSchema.methods.generateAuthToken = async function () {
   try {
-    let myToken = jwt.sign({ _id: this._id }, process.env.SEC_KEY);
+    let myToken = jwt.sign({ _id: this._id.toString() }, process.env.SEC_KEY);
     this.tokens = this.tokens.concat({ token: myToken });
     await this.save();
     return myToken;

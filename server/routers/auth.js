@@ -42,22 +42,19 @@ router.post("/signin", cors(), async (req, res) => {
     let myToken = "";
     let isRigistered = await User.findOne({ email: email });
     if (isRigistered) {
+      console.log("My User Data 45 line", isRigistered);
 
-      // console.log("Entered Pass =>",password, "Database Pass= >",  isRigistered);
       const isMatch = await bcrypt.compare(password, isRigistered.password);
 
-      myToken = await isRigistered.generateAuthToken();
-      res.cookie("JWTToken", myToken, {
-        expires: new Date(Date.now() + 25892000000),
-        httpOnly: true,
-      });
-      console.log(myToken);
-
+      console.log(isRigistered.password, password);
       if (isMatch) {
+        myToken = await isRigistered.generateAuthToken();
+     
+        console.log("My User Token 53 line", myToken);
+
         res.json({ message: "Signed in Done" });
       } else {
         res.status(400).json({ message: "password not compared" });
-        // res.status(200).json({ message: "Signed in Done" });
       }
     } else {
       return res.status(400).json({ message: "Wrong credential 1" });
